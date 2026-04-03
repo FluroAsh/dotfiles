@@ -1,0 +1,289 @@
+{
+  // Editor Settings
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSave": true,
+  "editor.fontFamily": "Monaspace Neon Var",
+  "editor.fontSize": 12,
+  "editor.fontWeight": "700",
+  "editor.fontLigatures": "'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08', 'calt', 'dlig'",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.linkedEditing": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.suggestSelection": "recentlyUsed",
+  "editor.suggestFontSize": 12,
+  "editor.suggestLineHeight": 15,
+  "editor.scrollbar.vertical": "hidden",
+  "editor.minimap.maxColumn": 50,
+  "editor.minimap.renderCharacters": false,
+  "editor.largeFileOptimizations": false,
+  "editor.colorDecoratorsActivatedOn": "hover",
+
+  "[markdown]": {
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    }
+  },
+  "[python]": {
+    "editor.formatOnType": true
+  },
+
+  // Files Settings
+  "files.associations": {
+    "*.jsx": "javascriptreact",
+    "*.ts": "typescript"
+  },
+  // "files.autoSaveWhenNoErrors": true,
+  "files.autoSaveDelay": 500,
+
+  // Terminal Settings
+  "terminal.integrated.fontFamily": "MesloLGL Nerd Font Mono",
+  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.fontWeight": "bold",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash",
+      "icon": "terminal-bash"
+    },
+    "zsh": {
+      "path": "zsh"
+    },
+    "fish": {
+      "path": "fish"
+    },
+    "tmux": {
+      "path": "tmux",
+      "icon": "terminal-tmux"
+    },
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    }
+  },
+  "terminal.integrated.env.linux": {},
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.shellIntegration.decorationsEnabled": "never",
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "terminal.integrated.allowedLinkSchemes": [
+    "file",
+    "http",
+    "https",
+    "mailto",
+    "vscode",
+    "vscode-insiders",
+    "docker-desktop"
+  ],
+  "terminal.integrated.tabs.defaultIcon": "github",
+  "terminal.external.windowsExec": "C:\\windows\\System32\\wsl.exe",
+  "terminal.external.linuxExec": "wsl.exe",
+
+  // Workbench Settings
+  "workbench.colorTheme": "Monokai Pro (Filter Spectrum)",
+  "workbench.iconTheme": "dobri-simple-icons",
+  "workbench.startupEditor": "none",
+  "workbench.tree.indent": 15,
+  "workbench.view.alwaysShowHeaderActions": true,
+  "workbench.panel.opensMaximized": "never",
+  "workbench.editor.pinnedTabsOnSeparateRow": true,
+  "workbench.editor.tabSizing": "shrink",
+  "workbench.navigationControl.enabled": false,
+  "workbench.settings.applyToAllProfiles": ["scss.showErrors"],
+
+  // Explorer Settings
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmPasteNative": false,
+
+  // Diff Editor Settings
+  "diffEditor.renderSideBySide": false,
+  "diffEditor.experimental.showMoves": true,
+  "diffEditor.ignoreTrimWhitespace": true,
+  "diffEditor.useInlineViewWhenSpaceIsLimited": false,
+
+  // Git Settings
+  "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "always",
+
+  // JavaScript/TypeScript Settings
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+
+  // Security & Workspace Settings
+  "security.workspace.trust.untrustedFiles": "open",
+  "security.promptForLocalFileProtocolHandling": false,
+  "application.shellEnvironmentResolutionTimeout": 30,
+
+  // Remote/SSH Settings
+  "remote.SSH.configFile": "/Users/ashleythompson/.ssh/config",
+  "remote.SSH.remotePlatform": {
+    "helios": "linux"
+  },
+
+  // Window Settings
+  "window.confirmSaveUntitledWorkspace": false,
+  "window.commandCenter": false,
+
+  // Comments Settings
+  "comments.thread.confirmOnCollapse": "never",
+
+  // Extension: Background
+  "background.enabled": true,
+  "background.editor": {
+    "random": true,
+    "useFront": false,
+    "images": ["/users/ashleythompson/Documents/wallpapers/active"],
+    "interval": 30,
+    "style": {
+      "background-position": "center",
+      "background-size": "cover",
+      "opacity": 0.05
+    }
+  },
+  "background.panel": {
+    "images": [
+      "file:///users/ashleythompson/Documents/wallpapers/ps2-background.webp"
+    ],
+    "opacity": 0.04,
+    "size": "cover",
+    "position": "center"
+  },
+
+  // Extension: Colorize
+  "colorize.colorized_colors": [
+    "HEXA",
+    "ARGB",
+    "RGB",
+    "HSL",
+    "BROWSERS_COLORS"
+  ],
+  "colorize.include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+
+  // Extension: Error Lens
+  "errorLens.fontFamily": "Monaspace Radon",
+  "errorLens.gutterIconsEnabled": true,
+  "errorLens.gutterIconSet": "emoji",
+  "errorLens.gutterIconSize": "auto",
+  "errorLens.gutterEmoji": {
+    "error": "💀",
+    "hint": "🔎",
+    "warning": "⚠️",
+    "info": "ℹ️"
+  },
+
+  // Extension: Todo Highlight
+  "todohighlight.keywords": [
+    "DEBUG:",
+    "REVIEW:",
+    "TEMP:",
+    "PLACEHOLDER:",
+    {
+      "text": "DONE:",
+      "regex": {
+        "pattern": "DONE:|DONE\\s",
+        "flags": "g"
+      },
+      "color": "#fff",
+      "backgroundColor": "#00FF0020",
+      "overviewRulerColor": "#00FF00"
+    },
+    {
+      "text": "STEP:",
+      "regex": {
+        "pattern": "STEP:|STEP\\s",
+        "flags": "g"
+      },
+      "color": "#fff",
+      "backgroundColor": "#FFFF0020",
+      "overviewRulerColor": "#FFFF00"
+    },
+    {
+      "text": "HACK:",
+      "regex": {
+        "pattern": "HACK:|HACK\\s",
+        "flags": "g"
+      },
+      "color": "#fff",
+      "backgroundColor": "#FF000020",
+      "overviewRulerColor": "#FF0000",
+      "border": "1px dashed #FF0000",
+      "diagnosticSeverity": "information"
+    },
+    {
+      "text": "NOTE:",
+      "regex": {
+        "pattern": "NOTE:|NOTE\\s",
+        "flags": "g"
+      },
+      "color": "#fff",
+      "backgroundColor": "#0000FF20",
+      "overviewRulerColor": "#0000FF",
+      "border": "1px dashed #0000FF"
+    }
+  ],
+  "todohighlight.defaultStyle": {},
+  "todohighlight.isCaseSensitive": true,
+  "todohighlight.isEnable": true,
+
+  // Extension: Emmet
+  "emmet.includeLanguages": {
+    "mdx": "html"
+  },
+  "emmet.showAbbreviationSuggestions": false,
+
+  // Extension: Live Server
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.donotVerifyTags": true,
+
+  // Extension: Markdown Preview Enhanced
+  "markdown-preview-enhanced.previewTheme": "github-dark.css",
+  "markdown-preview-enhanced.enablePreviewZenMode": false,
+
+  // Extension: Tailwind CSS
+  "tailwindCSS.experimental.configFile": null,
+  "tailwindCSS.experimental.classRegex": [
+    // Should recoginse common helpers/packages
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+
+  // Extension: Svelte
+  "svelte.enable-ts-plugin": true,
+
+  // Extension: Playwright
+  "playwright.reuseBrowser": false,
+
+  // Extension: Nx Console
+  "nxConsole.showNodeVersionOnStartup": false,
+
+  // Extension: Docker
+  "docker.extension.dockerEngineAvailabilityPrompt": false,
+
+  // Extension: Makefile
+  "makefile.configureOnOpen": true,
+
+  // Extension: Cursor
+  "cursor.cpp.disabledLanguages": ["scminput", "mdx"],
+  "workbench.editor.pinnedTabSizing": "shrink",
+  "workbench.editor.highlightModifiedTabs": true,
+  "cursor.composer.usageSummaryDisplay": "always",
+  "cursor.composer.queueMessageDefaultBehavior": "stop-and-send",
+  "editor.minimap.autohide": true,
+  "editor.minimap.enabled": true,
+  "editor.accessibilitySupport": "off",
+  "git.confirmSync": false,
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "claudeCode.preferredLocation": "panel",
+  "update.releaseTrack": "dev"
+}
