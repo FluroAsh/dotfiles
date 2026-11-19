@@ -1,13 +1,12 @@
 # dotfiles
 
-Terminal and editor config shared between my machines.
+Terminal config shared between my machines.
 
 | Path | Tool | Linked to |
 | --- | --- | --- |
 | `ghostty/config.ghostty` | [Ghostty](https://ghostty.org) | `~/.config/ghostty/config.ghostty` |
 | `ghostty/themes/*` | Ghostty custom themes (Gruvbox Sepia Light/Dark) | `~/.config/ghostty/themes/` |
 | `herdr/config.toml` | Herdr | `~/.config/herdr/config.toml` |
-| `cursor/*` | Cursor settings and keybindings | `~/Library/Application Support/Cursor/User/` (macOS) or `~/.config/Cursor/User/` |
 
 ## Set up a new machine
 
@@ -24,7 +23,7 @@ out of the ones you don't want on a given machine.
 | --- | --- |
 | `./install.sh` | Wizard: asks per tool, default yes |
 | `./install.sh --yes` | No prompts: install everything (or your saved choices) |
-| `./install.sh --skip cursor,herdr` | Skip the listed tools |
+| `./install.sh --skip herdr` | Skip the listed tools |
 | `./install.sh --only ghostty` | Install only the listed tools |
 | `./install.sh --dry-run` | Show what would be linked, change nothing |
 | `./install.sh --list` | List the tools |
