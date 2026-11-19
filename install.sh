@@ -4,7 +4,7 @@
 #
 #   ./install.sh                 wizard (asks per tool, default yes)
 #   ./install.sh --yes           no prompts, install everything (or the saved choices)
-#   ./install.sh --skip cursor   skip one or more tools (comma separated)
+#   ./install.sh --skip herdr    skip one or more tools (comma separated)
 #   ./install.sh --only ghostty  install only the listed tools
 #   ./install.sh --dry-run       show what would happen, change nothing
 #   ./install.sh --list          list the tools
@@ -22,8 +22,7 @@ OS="$(uname)"
 
 # Tools: name|description. Order is the order of the wizard.
 TOOLS="ghostty|Ghostty terminal config and Gruvbox Sepia themes
-herdr|Herdr config
-cursor|Cursor settings and keybindings"
+herdr|Herdr config"
 
 tool_names() { printf '%s\n' "$TOOLS" | cut -d'|' -f1; }
 tool_desc()  { printf '%s\n' "$TOOLS" | awk -F'|' -v t="$1" '$1 == t { print $2 }'; }
@@ -143,17 +142,6 @@ install_ghostty() {
 
 install_herdr() {
   link "$REPO/herdr/config.toml" "$CONFIG/herdr/config.toml"
-}
-
-install_cursor() {
-  local user_dir
-  if [ "$OS" = Darwin ]; then
-    user_dir="$HOME/Library/Application Support/Cursor/User"
-  else
-    user_dir="$CONFIG/Cursor/User"
-  fi
-  link "$REPO/cursor/settings.json" "$user_dir/settings.json"
-  link "$REPO/cursor/keybindings.json" "$user_dir/keybindings.json"
 }
 
 for t in $(tool_names); do
