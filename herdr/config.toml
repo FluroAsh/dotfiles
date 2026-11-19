@@ -1,0 +1,24 @@
+onboarding = false
+
+[theme]
+name = "vesper"
+
+[theme.custom]
+# Match the Ghostty sepia background (Gruvbox Sepia Dark).
+sidebar_bg = "#2b2520"
+# Brighter, warm text so the sidebar labels (session names, "claude", headings) stand out.
+text = "#efe4cc"
+subtext0 = "#d2c6ad"
+overlay0 = "#b0a58f"
+overlay1 = "#c4b9a2"
+# Separator lines in the sidebar.
+surface_dim = "#7a705e"
+
+[ui]
+sidebar_max_width = 30
+
+[ui.sidebar.agents]
+rows = [
+  ["state_icon", "terminal_title_stripped"],
+  [{ token = "workspace", dim = true }, { token = "tab", dim = true }],
+]

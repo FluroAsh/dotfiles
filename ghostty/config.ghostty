@@ -1,0 +1,35 @@
+bell-features = audio,no-system
+bell-audio-path = /System/Library/Sounds/Purr.aiff
+bell-audio-volume = 0.5
+# Readability-focused config for TUI output (Claude Code, git, etc.)
+
+# Font: JetBrains Mono is bundled with Ghostty, so no install needed.
+# Tall x-height, clear 0/O and 1/l/I, good at small sizes.
+font-family = JetBrains Mono
+font-size = 13
+
+# Slightly heavier strokes on macOS; easier on Retina.
+font-thicken = true
+
+# More line spacing so dense TUI rows don't blur together.
+adjust-cell-height = 20%
+
+# No ligatures: keeps box-drawing, diff and arrow chars literal.
+font-feature = -calt
+
+# Theme follows macOS appearance. Neutral warm-grey background with muted blues, so text never blends into the background.
+theme = light:Gruvbox Sepia Light,dark:Gruvbox Sepia Dark
+
+# Guarantees a minimum contrast ratio so dim/grey TUI text (hints, diffs) stays legible.
+minimum-contrast = 1.5
+
+# Breathing room around the grid.
+window-padding-x = 12
+window-padding-y = 8
+window-padding-balance = true
+
+cursor-style = block
+cursor-style-blink = false
+
+window-save-state = always
+copy-on-select = clipboard
