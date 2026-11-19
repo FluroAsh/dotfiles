@@ -8,3 +8,10 @@ herdr/.plugins.lock
 herdr/session.json
 herdr/session-snapshots/
 herdr/release-notes.json
+
+# Secrets: inject via the shell environment, never commit
+.env
+.env.*
+.envrc
+*.pem
+*.key
