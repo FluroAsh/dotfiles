@@ -1,0 +1,10 @@
+.DS_Store
+# Herdr runtime state, never config
+herdr/*.log
+herdr/*.sock
+herdr/*.sock.agent
+herdr/*.bak
+herdr/.plugins.lock
+herdr/session.json
+herdr/session-snapshots/
+herdr/release-notes.json
