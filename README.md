@@ -1,24 +1,40 @@
 # dotfiles
 
-Terminal config shared between my machines.
+Terminal and editor config shared between my machines.
 
 | Path | Tool | Linked to |
 | --- | --- | --- |
 | `ghostty/config.ghostty` | [Ghostty](https://ghostty.org) | `~/.config/ghostty/config.ghostty` |
 | `ghostty/themes/*` | Ghostty custom themes (Gruvbox Sepia Light/Dark) | `~/.config/ghostty/themes/` |
 | `herdr/config.toml` | Herdr | `~/.config/herdr/config.toml` |
-| `cursor/*` | Cursor settings and keybindings | copy or link manually (not handled by `install.sh`) |
+| `cursor/*` | Cursor settings and keybindings | `~/Library/Application Support/Cursor/User/` (macOS) or `~/.config/Cursor/User/` |
 
 ## Set up a new machine
 
 ```sh
-git clone https://github.com/<user>/dotfiles ~/dotfiles
+git clone https://github.com/FluroAsh/dotfiles ~/dotfiles
 ~/dotfiles/install.sh
 ```
 
+Everything is enabled by default. In a terminal, `install.sh` runs a short
+wizard that asks about each tool (Enter accepts the default), so you can opt
+out of the ones you don't want on a given machine.
+
+| Command | Effect |
+| --- | --- |
+| `./install.sh` | Wizard: asks per tool, default yes |
+| `./install.sh --yes` | No prompts: install everything (or your saved choices) |
+| `./install.sh --skip cursor,herdr` | Skip the listed tools |
+| `./install.sh --only ghostty` | Install only the listed tools |
+| `./install.sh --dry-run` | Show what would be linked, change nothing |
+| `./install.sh --list` | List the tools |
+
 The script symlinks each file into place and backs up anything already there
-as `<file>.bak.<timestamp>`. Re-running it is safe. Edit the files in this repo
-(or through the symlinks), then commit and push.
+as `<file>.bak.<timestamp>`. Re-running it is safe. Your choices are saved to
+`~/.config/dotfiles/choices` (outside the repo) and become the wizard's
+defaults next time. Skipping a tool never removes a link made earlier.
+
+Edit the files in this repo (or through the symlinks), then commit and push.
 
 ## Secrets: never commit them
 

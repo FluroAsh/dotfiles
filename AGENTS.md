@@ -33,5 +33,9 @@ This repository is public.
 
 - Edit the files here, not the symlinked copies elsewhere, then commit and push.
 - Keep `install.sh` idempotent: it must back up existing files and be safe to re-run.
+- Every tool is enabled by default and can be opted out through the wizard or
+  `--skip`/`--only`. To add a tool, add a line to `TOOLS` and an `install_<name>`
+  function in `install.sh`, then list it in the README tables. The script must
+  stay compatible with macOS's bash 3.2 (no associative arrays).
 - Runtime state (Herdr logs, sockets, session snapshots) stays out of git.
 - Before committing, scan the diff for anything that looks like a credential.
