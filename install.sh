@@ -23,7 +23,7 @@ OS="$(uname)"
 # Tools: name|description. Order is the order of the wizard.
 TOOLS="ghostty|Ghostty terminal config and Gruvbox Sepia themes
 herdr|Herdr config
-zed|Zed settings and keymap"
+zed|Zed settings, keymap and extension sync"
 
 tool_names() { printf '%s\n' "$TOOLS" | cut -d'|' -f1; }
 tool_desc()  { printf '%s\n' "$TOOLS" | awk -F'|' -v t="$1" '$1 == t { print $2 }'; }
@@ -151,11 +151,92 @@ install_herdr() {
   link "$REPO/herdr/config.toml" "$CONFIG/herdr/config.toml"
 }
 
+ZED_SYNC="$REPO/zed/sync-extensions.sh"
+ZED_AGENT_LABEL="dotfiles.zed-extensions"
+ZED_AGENT="$HOME/Library/LaunchAgents/$ZED_AGENT_LABEL.plist"
+ZED_EXT_DIR="$HOME/Library/Application Support/Zed/extensions"
+
+# launchd runs the export when Zed's installed/ folder changes, then exits.
+zed_agent_plist() {
+  cat <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>$ZED_AGENT_LABEL</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>$ZED_SYNC</string>
+    <string>export</string>
+    <string>--settle</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict><key>XDG_CONFIG_HOME</key><string>$CONFIG</string></dict>
+  <key>WatchPaths</key>
+  <array><string>$ZED_EXT_DIR/installed</string></array>
+  <key>StandardOutPath</key><string>$CONFIG/dotfiles/zed-extensions.log</string>
+  <key>StandardErrorPath</key><string>$CONFIG/dotfiles/zed-extensions.log</string>
+</dict>
+</plist>
+PLIST
+}
+
+zed_agent_ok() {
+  [ -f "$ZED_AGENT" ] && [ "$(cat "$ZED_AGENT")" = "$(zed_agent_plist)" ] \
+    && launchctl print "gui/$(id -u)/$ZED_AGENT_LABEL" >/dev/null 2>&1
+}
+
 install_zed() {
   # Zed reads ~/.config/zed on macOS and $XDG_CONFIG_HOME/zed on Linux. Only the
   # two JSON files are linked; prompts/ is a local database and stays out.
   link "$REPO/zed/settings.json" "$CONFIG/zed/settings.json"
   link "$REPO/zed/keymap.json" "$CONFIG/zed/keymap.json"
+
+  if [ "$CHECK" -eq 1 ]; then
+    [ "$OS" != Darwin ] || zed_agent_ok || PENDING=1
+    return 0
+  fi
+
+  # Extensions: keep auto_install_extensions 1:1 with what's installed.
+  if [ "$OS" = Darwin ]; then
+    if zed_agent_ok; then
+      echo "ok      $ZED_AGENT"
+    elif [ "$DRY_RUN" -eq 1 ]; then
+      echo "would   load $ZED_AGENT (syncs the extension list on install/uninstall)"
+    else
+      mkdir -p "$(dirname "$ZED_AGENT")" "$ZED_EXT_DIR/installed" "$CONFIG/dotfiles"
+      zed_agent_plist > "$ZED_AGENT"
+      launchctl bootout "gui/$(id -u)/$ZED_AGENT_LABEL" >/dev/null 2>&1 || true
+      launchctl bootstrap "gui/$(id -u)" "$ZED_AGENT"
+      echo "agent   $ZED_AGENT loaded"
+    fi
+  else
+    echo "note    no watcher on $OS; run zed/sync-extensions.sh export after changing extensions"
+  fi
+
+  if [ "$DRY_RUN" -eq 1 ]; then
+    /bin/bash "$ZED_SYNC" prune --dry-run
+    return 0
+  fi
+  # Carry this machine's installs and uninstalls into the list first, so only
+  # changes from other machines are left for prune.
+  /bin/bash "$ZED_SYNC" export
+  local extras; extras="$(/bin/bash "$ZED_SYNC" extras | tr '\n' ' ')"
+  [ -n "${extras// /}" ] || return 0
+  if [ "$ASSUME_YES" -eq 1 ]; then
+    /bin/bash "$ZED_SYNC" prune
+  elif [ -t 0 ] && [ -t 1 ]; then
+    echo "Zed extensions installed here but uninstalled on another machine: $extras"
+    local ans
+    read -r -p "Remove them here? (n keeps them and lists them again) [Y/n] " ans || ans=""
+    case "$ans" in
+      [Nn]*) /bin/bash "$ZED_SYNC" adopt ;;
+      *)     /bin/bash "$ZED_SYNC" prune ;;
+    esac
+  else
+    echo "note    Zed extensions not on the list: $extras(run ./install.sh to remove)"
+  fi
 }
 
 needs_install() {

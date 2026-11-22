@@ -9,6 +9,7 @@ Terminal and editor config shared between my machines.
 | `herdr/config.toml` | Herdr | `~/.config/herdr/config.toml` |
 | `zed/settings.json` | [Zed](https://zed.dev) settings | `~/.config/zed/settings.json` |
 | `zed/keymap.json` | Zed key bindings | `~/.config/zed/keymap.json` |
+| `zed/sync-extensions.sh` | Zed extension sync (see below) | Run by a LaunchAgent, `~/Library/LaunchAgents/dotfiles.zed-extensions.plist` |
 
 ## Set up a new machine
 
@@ -56,13 +57,34 @@ file here, ever.** Inject them from the shell environment instead.
   not make it safe again.
 - `.env` files are git-ignored here as a backstop.
 
+## Zed extensions
+
+Extensions (themes included) stay in step 1:1 between machines through the
+`auto_install_extensions` list in `zed/settings.json`. Install and uninstall
+in Zed as usual; don't edit the list by hand.
+
+- **Installing or uninstalling on a machine** updates the list straight away.
+  `install.sh` sets up a LaunchAgent that watches Zed's extensions folder and
+  runs `zed/sync-extensions.sh export` when it changes. Nothing runs in
+  between. Commit and push the change to `settings.json`.
+- **After a pull**, Zed installs anything newly listed on its next start. Run
+  `./install.sh` to remove extensions that were uninstalled elsewhere; it lists
+  them and asks first (answer `n` to keep them and list them again). Zed must be
+  closed for this, because Zed has no command to uninstall an extension.
+- The first run on a machine adds its extensions to the list and removes
+  nothing. Dev extensions (symlinked local checkouts) are ignored.
+- `zed/sync-extensions.sh status` shows what differs; the agent logs to
+  `~/.config/dotfiles/zed-extensions.log`.
+- The watcher is macOS-only. On Linux, run `zed/sync-extensions.sh export`
+  after changing extensions.
+
 ## Notes
 
 - Herdr's logs, sockets and session snapshots are runtime state and are
   git-ignored; only `config.toml` is tracked.
-- Zed's `prompts/` (a local database) and any themes installed through Zed
-  stay out of the repo; only `settings.json` and `keymap.json` are tracked.
-  Changes made in Zed's settings UI write through the symlink into this repo.
+- Zed's `prompts/` (a local database) stays out of the repo; only
+  `settings.json` and `keymap.json` are tracked. Changes made in Zed's
+  settings UI write through the symlink into this repo.
 - Zed's edit predictions point at a local Ollama (`localhost:11435`,
   `qwen2.5-coder:7b`). On a machine without it, predictions just don't load.
 - Ghostty's JetBrains Mono font is bundled with Ghostty, nothing to install.
