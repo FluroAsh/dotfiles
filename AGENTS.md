@@ -20,9 +20,11 @@ This repository is public.
 
 ## Git identity and pushing
 
-- Commits use the repo-local git identity, already configured to the personal
-  GitHub account's `noreply` address. Never override it with the global (work)
-  identity and never use a work GitHub account or work SSH key for this repo.
+- Commit as the personal email that's linked to the personal GitHub account,
+  not the `noreply` address. Pass it per command with `git -c user.name=…
+  -c user.email=…` (the `personal-repo-identity` skill has the values) rather
+  than storing it in the repo's git config. Never commit with the global
+  (work) identity and never use a work GitHub account or work SSH key here.
 - Authenticate pushes through `gh`'s stored login for the personal account,
   passed per command via `GH_TOKEN` from `gh auth token --user <personal>`.
   The shell's `GITHUB_TOKEN` belongs to the work account, so unset or override
