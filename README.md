@@ -18,12 +18,13 @@ git clone https://github.com/FluroAsh/dotfiles ~/dotfiles
 ```
 
 Everything is enabled by default. In a terminal, `install.sh` runs a short
-wizard that asks about each tool (Enter accepts the default), so you can opt
-out of the ones you don't want on a given machine.
+wizard that asks about each tool with something left to link (Enter accepts
+the default), so you can opt out of the ones you don't want on a given
+machine. Tools that are already fully linked aren't asked about again.
 
 | Command | Effect |
 | --- | --- |
-| `./install.sh` | Wizard: asks per tool, default yes |
+| `./install.sh` | Wizard: asks about each unlinked tool, default yes |
 | `./install.sh --yes` | No prompts: install everything (or your saved choices) |
 | `./install.sh --skip herdr` | Skip the listed tools |
 | `./install.sh --only ghostty` | Install only the listed tools |

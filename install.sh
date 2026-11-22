@@ -85,33 +85,22 @@ if [ -n "$SKIP" ]; then
   for t in $(printf '%s' "$SKIP" | tr ',' ' '); do sel_set "$t" off; done
 fi
 
-# --- Wizard (only when interactive and nothing was decided by flags) --------
-if [ "$ASSUME_YES" -eq 0 ] && [ "$FLAGGED" -eq 0 ] && [ -t 0 ] && [ -t 1 ]; then
-  echo "Dotfiles setup: press Enter to accept the default shown in brackets."
-  echo
-  for t in $(tool_names); do
-    current="$(sel_get "$t")"
-    if [ "$current" = on ]; then prompt="[Y/n]"; else prompt="[y/N]"; fi
-    while true; do
-      read -r -p "Install $(tool_desc "$t")? $prompt " ans || ans=""
-      case "$ans" in
-        "")        break ;;
-        [Yy]*)     current=on;  break ;;
-        [Nn]*)     current=off; break ;;
-        *)         echo "  Please answer y or n." ;;
-      esac
-    done
-    sel_set "$t" "$current"
-  done
-  echo
-fi
-
 # --- Linking ----------------------------------------------------------------
+# With CHECK=1, link() changes and prints nothing; it only sets PENDING=1 when a
+# link is missing or points elsewhere. needs_install() uses this to tell which
+# tools still have something to do.
+CHECK=0
+PENDING=0
+
 link() {
   local src="$1" dest="$2"
   if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
-    echo "ok      $dest"
-    return
+    [ "$CHECK" -eq 1 ] || echo "ok      $dest"
+    return 0
+  fi
+  if [ "$CHECK" -eq 1 ]; then
+    PENDING=1
+    return 0
   fi
   # A byte-for-byte identical file has nothing worth keeping, so link it in
   # place without leaving a backup behind.
@@ -150,6 +139,7 @@ install_ghostty() {
   for theme in "$REPO"/ghostty/themes/*; do
     link "$theme" "$CONFIG/ghostty/themes/$(basename "$theme")"
   done
+  [ "$CHECK" -eq 0 ] || return 0
   # A leftover macOS-path config is loaded as well and could override the link.
   local mac_cfg="$HOME/Library/Application Support/com.mitchellh.ghostty/config.ghostty"
   if [ "$OS" = Darwin ] && [ -e "$mac_cfg" ] && [ ! -L "$mac_cfg" ]; then
@@ -167,6 +157,41 @@ install_zed() {
   link "$REPO/zed/settings.json" "$CONFIG/zed/settings.json"
   link "$REPO/zed/keymap.json" "$CONFIG/zed/keymap.json"
 }
+
+needs_install() {
+  CHECK=1; PENDING=0
+  "install_$1"
+  CHECK=0
+  [ "$PENDING" -eq 1 ]
+}
+
+# --- Wizard (only when interactive and nothing was decided by flags) --------
+# Only asks about tools with something left to link; fully linked tools stay on.
+if [ "$ASSUME_YES" -eq 0 ] && [ "$FLAGGED" -eq 0 ] && [ -t 0 ] && [ -t 1 ]; then
+  ASK=""
+  for t in $(tool_names); do
+    if needs_install "$t"; then ASK="$ASK $t"; else sel_set "$t" on; fi
+  done
+  if [ -n "$ASK" ]; then
+    echo "Dotfiles setup: press Enter to accept the default shown in brackets."
+    echo
+  fi
+  for t in $ASK; do
+    current="$(sel_get "$t")"
+    if [ "$current" = on ]; then prompt="[Y/n]"; else prompt="[y/N]"; fi
+    while true; do
+      read -r -p "Install $(tool_desc "$t")? $prompt " ans || ans=""
+      case "$ans" in
+        "")        break ;;
+        [Yy]*)     current=on;  break ;;
+        [Nn]*)     current=off; break ;;
+        *)         echo "  Please answer y or n." ;;
+      esac
+    done
+    sel_set "$t" "$current"
+  done
+  [ -z "$ASK" ] || echo
+fi
 
 for t in $(tool_names); do
   if [ "$(sel_get "$t")" = on ]; then
