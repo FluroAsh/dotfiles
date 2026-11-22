@@ -10,7 +10,7 @@
 #   ./install.sh --list          list the tools
 #
 # Safe to re-run. Existing real files are moved to <name>.bak.<timestamp>
-# before linking. Choices are remembered in $XDG_CONFIG_HOME/dotfiles/choices
+# before linking, unless they're identical to the repo copy. Choices are remembered in $XDG_CONFIG_HOME/dotfiles/choices
 # (outside the repo) and become the wizard's defaults next time.
 set -euo pipefail
 
@@ -113,11 +113,27 @@ link() {
     echo "ok      $dest"
     return
   fi
+  # A byte-for-byte identical file has nothing worth keeping, so link it in
+  # place without leaving a backup behind.
+  local same=0
+  if [ -f "$dest" ] && cmp -s "$src" "$dest"; then
+    same=1
+  fi
   if [ "$DRY_RUN" -eq 1 ]; then
-    echo "would   link $dest -> $src"
+    if [ "$same" -eq 1 ]; then
+      echo "would   link $dest -> $src (identical, no backup)"
+    else
+      echo "would   link $dest -> $src"
+    fi
     return
   fi
   mkdir -p "$(dirname "$dest")"
+  if [ "$same" -eq 1 ]; then
+    rm "$dest"
+    ln -s "$src" "$dest"
+    echo "link    $dest -> $src (identical, no backup)"
+    return
+  fi
   if [ -e "$dest" ] || [ -L "$dest" ]; then
     mv "$dest" "$dest.bak.$STAMP"
     echo "backup  $dest -> $dest.bak.$STAMP"

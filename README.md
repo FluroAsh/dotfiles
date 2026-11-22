@@ -31,9 +31,10 @@ out of the ones you don't want on a given machine.
 | `./install.sh --list` | List the tools |
 
 The script symlinks each file into place and backs up anything already there
-as `<file>.bak.<timestamp>`. Re-running it is safe. Your choices are saved to
-`~/.config/dotfiles/choices` (outside the repo) and become the wizard's
-defaults next time. Skipping a tool never removes a link made earlier.
+as `<file>.bak.<timestamp>`. A file that's byte-for-byte identical to the repo
+copy is replaced without a backup. Re-running it is safe. Your choices are
+saved to `~/.config/dotfiles/choices` (outside the repo) and become the
+wizard's defaults next time. Skipping a tool never removes a link made earlier.
 
 Edit the files in this repo (or through the symlinks), then commit and push.
 
