@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Personal dotfiles shared between machines: Ghostty and Herdr config,
+Personal dotfiles shared between machines: Ghostty, Herdr and Zed config,
 plus `install.sh` to symlink them into place. See `README.md` for layout and
 setup.
 

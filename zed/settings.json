@@ -1,0 +1,138 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "git": {
+    "auto_fetch": {
+      "interval_secs": 60,
+      "enabled": true
+    }
+  },
+  "diff_view_style": "split",
+  "markdown_preview": {
+    "max_width": 1200.0,
+    "open_markdown_files_in_preview": true
+  },
+  "buffer_line_height": "comfortable",
+  "window_title_format": "${projectName}${separator}${fileName}",
+  "prettier": {
+    "parser": ""
+  },
+  "tab_bar": {
+    "show_pinned_tabs_in_separate_row": true,
+  },
+  "minimap": { "thumb": "hover",
+               "max_width_columns": 140,
+               "current_line_highlight": "all",
+               "show": "auto" },
+  "edit_predictions": {
+    "provider": "ollama",
+    "ollama": {
+      "api_url": "http://localhost:11435",
+      "model": "qwen2.5-coder:7b",
+      "prompt_format": "infer",
+      "max_output_tokens": 256,
+    },
+  },
+  "show_completions_on_input": true,
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Material Icon Theme",
+    "dark": "Material Icon Theme",
+  },
+  "project_panel": {
+    "sort_order": "default",
+    "file_icons": true,
+    "dock": "left",
+  },
+  "tabs": {
+    "file_icons": true,
+  },
+  "outline_panel": {
+    "file_icons": true,
+    "dock": "left",
+  },
+  // Format every file on save. "auto" uses Prettier where Zed allows it (JS, TS,
+  // Vue, CSS, JSON, YAML, Markdown, HTML…), resolving the project's own
+  // node_modules/prettier and .prettierrc, and the language server elsewhere.
+  "format_on_save": "on",
+  "formatter": "auto",
+  "languages": {
+    // Opt out of langauges as needed (eg below)
+    "Markdown": { "format_on_save": "off" },
+    // Run ESLint's fix-all (import-x/order etc.) before Prettier, like VS Code's
+    // "source.fixAll.eslint" code action on save.
+    "JavaScript": { "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"] },
+    "TypeScript": { "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"] },
+    "TSX": { "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"] },
+    "Vue.js": {
+      "prettier": { "allowed": true },
+      "show_completions_on_input": true,
+      "language_servers": ["...", "eslint"],
+      "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"],
+    },
+  },
+  "lsp": {
+    "eslint": {
+      "settings": {
+        // For monorepos with no root eslint.config, where each app/lib has its own.
+        "workingDirectories": [{ "mode": "auto" }],
+      },
+    },
+  },
+  "collaboration_panel": {
+    "button": false,
+    "dock": "left",
+  },
+  "agent": {
+    "expand_terminal_card": false,
+    "auto_compact": {
+      "threshold": "70%",
+    },
+    "threads_sidebar": {
+      "default_width": 150.0,
+      "position": "right",
+    },
+    "dock": "right",
+    "favorite_models": [],
+    "model_parameters": [],
+  },
+  "git_panel": {
+    "collapse_untracked_diff": false,
+    "tree_view": true,
+    "dock": "left",
+  },
+  "agent_servers": {
+    "claude-acp": {
+      "favorite_config_option_values": {
+        "model": ["sonnet", "opus"],
+        "mode": ["auto"],
+      },
+      "default_config_options": {
+        "model": "sonnet",
+        "effort": "medium",
+        "mode": "auto",
+        "fast": false,
+      },
+      "type": "registry",
+    },
+  },
+  "cli_default_open_behavior": "new_window",
+  "ui_font_size": 16.0,
+  "buffer_font_size": 14.0,
+  "buffer_font_weight": 400.0,
+  "terminal": {
+    "font_weight": 400.0,
+    "font_size": 14.0,
+  },
+  "theme": {
+    "mode": "dark",
+    "light": "Gruvbox Light",
+    "dark": "Gruvbox Material",
+  },
+}

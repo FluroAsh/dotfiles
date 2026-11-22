@@ -1,12 +1,14 @@
 # dotfiles
 
-Terminal config shared between my machines.
+Terminal and editor config shared between my machines.
 
 | Path | Tool | Linked to |
 | --- | --- | --- |
 | `ghostty/config.ghostty` | [Ghostty](https://ghostty.org) | `~/.config/ghostty/config.ghostty` |
 | `ghostty/themes/*` | Ghostty custom themes (Gruvbox Sepia Light/Dark) | `~/.config/ghostty/themes/` |
 | `herdr/config.toml` | Herdr | `~/.config/herdr/config.toml` |
+| `zed/settings.json` | [Zed](https://zed.dev) settings | `~/.config/zed/settings.json` |
+| `zed/keymap.json` | Zed key bindings | `~/.config/zed/keymap.json` |
 
 ## Set up a new machine
 
@@ -56,6 +58,11 @@ file here, ever.** Inject them from the shell environment instead.
 
 - Herdr's logs, sockets and session snapshots are runtime state and are
   git-ignored; only `config.toml` is tracked.
+- Zed's `prompts/` (a local database) and any themes installed through Zed
+  stay out of the repo; only `settings.json` and `keymap.json` are tracked.
+  Changes made in Zed's settings UI write through the symlink into this repo.
+- Zed's edit predictions point at a local Ollama (`localhost:11435`,
+  `qwen2.5-coder:7b`). On a machine without it, predictions just don't load.
 - Ghostty's JetBrains Mono font is bundled with Ghostty, nothing to install.
 - Ghostty on macOS also reads `~/Library/Application Support/com.mitchellh.ghostty/config.ghostty`.
   This repo uses the XDG path only, so delete the Library one if it exists.

@@ -22,7 +22,8 @@ OS="$(uname)"
 
 # Tools: name|description. Order is the order of the wizard.
 TOOLS="ghostty|Ghostty terminal config and Gruvbox Sepia themes
-herdr|Herdr config"
+herdr|Herdr config
+zed|Zed settings and keymap"
 
 tool_names() { printf '%s\n' "$TOOLS" | cut -d'|' -f1; }
 tool_desc()  { printf '%s\n' "$TOOLS" | awk -F'|' -v t="$1" '$1 == t { print $2 }'; }
@@ -142,6 +143,13 @@ install_ghostty() {
 
 install_herdr() {
   link "$REPO/herdr/config.toml" "$CONFIG/herdr/config.toml"
+}
+
+install_zed() {
+  # Zed reads ~/.config/zed on macOS and $XDG_CONFIG_HOME/zed on Linux. Only the
+  # two JSON files are linked; prompts/ is a local database and stays out.
+  link "$REPO/zed/settings.json" "$CONFIG/zed/settings.json"
+  link "$REPO/zed/keymap.json" "$CONFIG/zed/keymap.json"
 }
 
 for t in $(tool_names); do

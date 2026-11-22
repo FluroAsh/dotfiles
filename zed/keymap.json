@@ -1,0 +1,45 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    },
+  },
+  {
+    // Zed's default cmd-\ (pane::SplitRight) matches at "Editor", so bind there to win;
+    // "Pane" covers tabs that aren't editors (terminal, panels)
+    "context": "Editor || Pane",
+    "bindings": {
+      // Move the active tab into the pane on the right (no clone left behind)
+      "cmd-\\": [
+        "workspace::MoveItemToPaneInDirection",
+        { "direction": "right", "focus": true, "clone": false },
+      ],
+    },
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      // Find all references (default: alt-shift-f12)
+      "cmd-shift-r": "editor::FindAllReferences",
+    },
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // "j k": "vim::NormalBefore"
+    },
+  },
+  {
+    "bindings": {
+      "cmd-shift-c": "git::CheckoutBranch",
+    },
+  },
+]
