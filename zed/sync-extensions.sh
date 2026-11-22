@@ -119,6 +119,9 @@ zed_running() { [ "${ZED_SYNC_IGNORE_RUNNING:-0}" = 1 ] && return 1; pgrep -x ze
 # Installed but not listed, one per line.
 extras() { LC_ALL=C comm -23 <(installed) <(listed); }
 
+# Listed but not installed (Zed installs these at startup), one per line.
+missing() { LC_ALL=C comm -13 <(installed) <(listed); }
+
 cmd_prune() {
   local dry=0 id gone=""
   [ "${1:-}" = --dry-run ] && dry=1
@@ -154,7 +157,7 @@ cmd_adopt() {
 
 cmd_status() {
   echo "Listed but not installed (Zed installs these on startup):"
-  LC_ALL=C comm -13 <(installed) <(listed) | sed 's/^/  /'
+  missing | sed 's/^/  /'
   echo "Installed but not listed (prune removes these):"
   extras | sed 's/^/  /'
 }
@@ -164,6 +167,7 @@ case "${1:-}" in
   prune)  shift; cmd_prune "$@" ;;
   adopt)  cmd_adopt ;;
   status) cmd_status ;;
-  extras) extras ;;
+  extras)  extras ;;
+  missing) missing ;;
   *)      sed -n '2,9p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac

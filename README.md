@@ -67,10 +67,12 @@ in Zed as usual; don't edit the list by hand.
   `install.sh` sets up a LaunchAgent that watches Zed's extensions folder and
   runs `zed/sync-extensions.sh export` when it changes. Nothing runs in
   between. Commit and push the change to `settings.json`.
-- **After a pull**, Zed installs anything newly listed on its next start. Run
-  `./install.sh` to remove extensions that were uninstalled elsewhere; it lists
-  them and asks first (answer `n` to keep them and list them again). Zed must be
-  closed for this, because Zed has no command to uninstall an extension.
+- **After a pull**, run `./install.sh`. Zed only reads the list at startup,
+  so when extensions are missing or need removing, the script quits Zed (a
+  normal quit, the same as ⌘Q), applies the changes and reopens it. Extensions uninstalled elsewhere are listed first and
+  it asks before removing them (answer `n` to keep them and list them again).
+  If Zed won't quit, for example because a dialog is open, it says so and
+  changes nothing.
 - The first run on a machine adds its extensions to the list and removes
   nothing. Dev extensions (symlinked local checkouts) are ignored.
 - `zed/sync-extensions.sh status` shows what differs; the agent logs to

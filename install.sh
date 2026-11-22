@@ -182,6 +182,22 @@ zed_agent_plist() {
 PLIST
 }
 
+zed_running() { pgrep -x zed >/dev/null 2>&1; }
+
+# Quit Zed the normal way, so it saves its session (unsaved buffers included)
+# and reopens the same windows. Waits up to 20s; never force-kills.
+zed_quit() {
+  [ "$OS" = Darwin ] || return 1
+  osascript -e 'tell application id "dev.zed.Zed" to quit' >/dev/null 2>&1 || true
+  local i=0
+  while zed_running; do
+    i=$((i + 1)); [ "$i" -le 40 ] || return 1
+    sleep 0.5
+  done
+}
+
+zed_open() { [ "$OS" = Darwin ] && open -b dev.zed.Zed; }
+
 zed_agent_ok() {
   [ -f "$ZED_AGENT" ] && [ "$(cat "$ZED_AGENT")" = "$(zed_agent_plist)" ] \
     && launchctl print "gui/$(id -u)/$ZED_AGENT_LABEL" >/dev/null 2>&1
@@ -215,27 +231,56 @@ install_zed() {
     echo "note    no watcher on $OS; run zed/sync-extensions.sh export after changing extensions"
   fi
 
+  local missing extras
   if [ "$DRY_RUN" -eq 1 ]; then
     /bin/bash "$ZED_SYNC" prune --dry-run
+    missing="$(/bin/bash "$ZED_SYNC" missing | tr '\n' ' ')"
+    [ -z "${missing// /}" ] || echo "would   install Zed extensions on restart: $missing"
+    if zed_running && [ -n "${missing// /}$(/bin/bash "$ZED_SYNC" extras)" ]; then
+      echo "would   restart Zed"
+    fi
     return 0
   fi
   # Carry this machine's installs and uninstalls into the list first, so only
-  # changes from other machines are left for prune.
+  # changes from other machines are left to apply.
   /bin/bash "$ZED_SYNC" export
-  local extras; extras="$(/bin/bash "$ZED_SYNC" extras | tr '\n' ' ')"
-  [ -n "${extras// /}" ] || return 0
-  if [ "$ASSUME_YES" -eq 1 ]; then
-    /bin/bash "$ZED_SYNC" prune
-  elif [ -t 0 ] && [ -t 1 ]; then
-    echo "Zed extensions installed here but uninstalled on another machine: $extras"
-    local ans
-    read -r -p "Remove them here? (n keeps them and lists them again) [Y/n] " ans || ans=""
-    case "$ans" in
-      [Nn]*) /bin/bash "$ZED_SYNC" adopt ;;
-      *)     /bin/bash "$ZED_SYNC" prune ;;
-    esac
-  else
-    echo "note    Zed extensions not on the list: $extras(run ./install.sh to remove)"
+  missing="$(/bin/bash "$ZED_SYNC" missing | tr '\n' ' ')"
+  extras="$(/bin/bash "$ZED_SYNC" extras | tr '\n' ' ')"
+  missing="${missing% }"; extras="${extras% }"
+
+  local action=""
+  if [ -n "$extras" ]; then
+    if [ "$ASSUME_YES" -eq 1 ]; then
+      action=prune
+    elif [ -t 0 ] && [ -t 1 ]; then
+      echo "Zed extensions installed here but uninstalled on another machine: $extras"
+      local ans
+      read -r -p "Remove them here? (n keeps them and lists them again) [Y/n] " ans || ans=""
+      case "$ans" in [Nn]*) action=adopt ;; *) action=prune ;; esac
+    else
+      echo "note    Zed extensions not on the list: $extras (run ./install.sh to remove)"
+    fi
+  fi
+  [ "$action" != adopt ] || { /bin/bash "$ZED_SYNC" adopt; action=""; }
+  [ -n "$missing" ] && echo "note    Zed installs on its next start: $missing"
+  [ -n "$missing" ] || [ "$action" = prune ] || return 0
+
+  # Zed only reads auto_install_extensions at startup, and extensions can only
+  # be removed while it's closed, so restart it to apply the changes.
+  if [ "$OS" != Darwin ]; then
+    echo "note    restart Zed to apply the extension changes"
+    [ "$action" != prune ] || /bin/bash "$ZED_SYNC" prune
+    return 0
+  fi
+  local was_running=0
+  if zed_running; then
+    was_running=1
+    zed_quit || { echo "warn    Zed didn't quit (a dialog waiting?); quit it and re-run ./install.sh"; return 0; }
+    echo "quit    Zed"
+  fi
+  [ "$action" != prune ] || /bin/bash "$ZED_SYNC" prune
+  if [ "$was_running" -eq 1 ]; then
+    zed_open && echo "open    Zed (restores your windows and installs the listed extensions)"
   fi
 }
 
