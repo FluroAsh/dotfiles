@@ -7,29 +7,32 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "file_scan_exclusions": ["**/.agents", "**/.claude"],
   "git": {
     "auto_fetch": {
       "interval_secs": 60,
-      "enabled": true
-    }
+      "enabled": true,
+    },
   },
   "diff_view_style": "split",
   "markdown_preview": {
     "max_width": 1200.0,
-    "open_markdown_files_in_preview": true
+    "open_markdown_files_in_preview": true,
   },
   "buffer_line_height": "comfortable",
   "window_title_format": "${projectName}${separator}${fileName}",
   "prettier": {
-    "parser": ""
+    "parser": "",
   },
   "tab_bar": {
     "show_pinned_tabs_in_separate_row": true,
   },
-  "minimap": { "thumb": "hover",
-               "max_width_columns": 140,
-               "current_line_highlight": "all",
-               "show": "auto" },
+  "minimap": {
+    "thumb": "hover",
+    "max_width_columns": 140,
+    "current_line_highlight": "all",
+    "show": "auto",
+  },
   "edit_predictions": {
     "provider": "ollama",
     "ollama": {
@@ -67,17 +70,31 @@
     "Markdown": { "format_on_save": "off" },
     // Run ESLint's fix-all (import-x/order etc.) before Prettier, like VS Code's
     // "source.fixAll.eslint" code action on save.
-    "JavaScript": { "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"] },
-    "TypeScript": { "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"] },
-    "TSX": { "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"] },
+    "JavaScript": {
+      "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"],
+    },
+    "TypeScript": {
+      "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"],
+    },
+    "TSX": {
+      "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"],
+    },
     "Vue.js": {
       "prettier": { "allowed": true },
       "show_completions_on_input": true,
-      "language_servers": ["...", "eslint"],
+      // vtsls must be listed for .vue files, or the Vue server gets "No Project" and template hover/go-to-definition fail.
+      "language_servers": ["vue-language-server", "vtsls", "eslint", "..."],
       "formatter": [{ "code_action": "source.fixAll.eslint" }, "prettier"],
     },
   },
   "lsp": {
+    // Use the repo's TypeScript (not vtsls's bundled one) so it matches the Vue plugin. Relative to the
+    // workspace root, so it only applies in web-monorepo checkouts and is ignored elsewhere.
+    "vtsls": {
+      "settings": {
+        "typescript": { "tsdk": "apps/portal/node_modules/typescript/lib" },
+      },
+    },
     "eslint": {
       "settings": {
         // For monorepos with no root eslint.config, where each app/lib has its own.
@@ -152,5 +169,11 @@
     "mode": "dark",
     "light": "Gruvbox Light",
     "dark": "Gruvbox Material",
+  },
+  "context_servers": {
+    "posthog": {
+      "enabled": true,
+      "url": "https://mcp.posthog.com/mcp",
+    },
   },
 }
